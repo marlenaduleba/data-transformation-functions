@@ -1,0 +1,15 @@
+{
+  "name": "data-transformation-functions",
+  "version": "1.0.0",
+  "description": "This JavaScript library provides advanced data transformation functions with the following features:",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Marlena Dulęba",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
