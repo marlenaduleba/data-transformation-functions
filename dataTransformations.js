@@ -60,3 +60,12 @@ function coerceToType(value, type) {
       throw new Error(`Unsupported type conversion to ${type}.`);
   }
 }
+
+
+module.exports = {
+    addValues,
+    stringifyValue,
+    invertBoolean,
+    convertToNumber,
+    coerceToType
+};
