@@ -1,3 +1,5 @@
+const { canBeMerged } = require("./helpers");
+
 function addValues(val1, val2) {
   if (typeof val1 !== typeof val2) {
     throw new Error("Values must be of the same type for addition.");
@@ -5,6 +7,8 @@ function addValues(val1, val2) {
   if (typeof val1 === "string") {
     return val1 + val2;
   } else if (typeof val1 === "number") {
+    return val1 + val2;
+  } else if (typeof val1 === "bigint") {
     return val1 + val2;
   } else if (Array.isArray(val1) && Array.isArray(val2)) {
     return [...val1, ...val2];
@@ -14,6 +18,9 @@ function addValues(val1, val2) {
     typeof val2 === "object" &&
     val2 !== null
   ) {
+    if (!canBeMerged(val1) || !canBeMerged(val2)) {
+      throw new Error("Objects contain non-mergable properties.");
+    }
     return { ...val1, ...val2 };
   } else {
     throw new Error("Addition of given types is not supported.");
@@ -35,6 +42,12 @@ function invertBoolean(value) {
 }
 
 function convertToNumber(value) {
+  if (typeof value === "string") {
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+      return parsedValue;
+    }
+  }
   const num = Number(value);
   if (isNaN(num)) {
     throw new Error("Cannot convert value to a number.");
@@ -61,11 +74,10 @@ function coerceToType(value, type) {
   }
 }
 
-
 module.exports = {
-    addValues,
-    stringifyValue,
-    invertBoolean,
-    convertToNumber,
-    coerceToType
+  addValues,
+  stringifyValue,
+  invertBoolean,
+  convertToNumber,
+  coerceToType,
 };
