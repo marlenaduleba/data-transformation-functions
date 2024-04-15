@@ -85,9 +85,9 @@ function convertToNumber(value) {
 function coerceToType(value, type) {
   switch (type) {
     case "string":
-      return String(value);
+      return stringifyValue(value);
     case "number":
-      return Number(value);
+      return convertToNumber(value);
     case "boolean":
       return Boolean(value);
     case "object":
