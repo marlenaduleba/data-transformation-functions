@@ -25,23 +25,27 @@ describe("addValues", () => {
     expect(addValues([1, 2], [])).toEqual([1, 2]);
   });
 
-  test('should merge two objects with unique keys', () => {
+  test("should merge two objects with unique keys", () => {
     expect(addValues({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 });
   });
 
-  test('should overwrite properties from the first object with properties from the second object', () => {
-    expect(addValues({ a: 1, b: 3 }, { b: 2, c: 4 })).toEqual({ a: 1, b: 2, c: 4 });
+  test("should overwrite properties from the first object with properties from the second object", () => {
+    expect(addValues({ a: 1, b: 3 }, { b: 2, c: 4 })).toEqual({
+      a: 1,
+      b: 2,
+      c: 4,
+    });
   });
 
-  test('should handle empty objects', () => {
+  test("should handle empty objects", () => {
     expect(addValues({}, {})).toEqual({});
     expect(addValues({}, { a: 1 })).toEqual({ a: 1 });
     expect(addValues({ b: 2 }, {})).toEqual({ b: 2 });
   });
 
-  test('should throw an error if objects cannot be merged (like with conflicting types)', () => {
+  test("should throw an error if objects cannot be merged (like with conflicting types)", () => {
     // Assuming we are not handling objects with non-serializable values like functions
-    const objectWithFunction = { a: function() {} };
+    const objectWithFunction = { a: function () {} };
     const normalObject = { b: 2 };
     expect(() => addValues(objectWithFunction, normalObject)).toThrow(Error);
   });
@@ -58,12 +62,38 @@ describe("addValues", () => {
 });
 
 describe("stringifyValue", () => {
+  test("should convert a string to string", () => {
+    expect(stringifyValue("hello")).toBe("hello");
+  });
+
+  test("should convert a number to string", () => {
+    expect(stringifyValue(123)).toBe("123");
+  });
+
+  test("should convert a boolean to string", () => {
+    expect(stringifyValue(true)).toBe("true");
+    expect(stringifyValue(false)).toBe("false");
+  });
+
+  test("should convert null to string", () => {
+    expect(stringifyValue(null)).toBe("null");
+  });
+
+  test("should convert undefined to string", () => {
+    expect(stringifyValue(undefined)).toBe("undefined");
+  });
   test("converts an array to JSON string", () => {
     expect(stringifyValue([1, 2, 3])).toBe("[1,2,3]");
   });
 
-  test("converts a number to string", () => {
-    expect(stringifyValue(123)).toBe("123");
+  test("should convert an object to JSON string", () => {
+    expect(stringifyValue({ a: 1, b: 2 })).toBe('{"a":1,"b":2}');
+  });
+
+  test("should handle cyclic references gracefully", () => {
+    const cyclicObj = { a: 1 };
+    cyclicObj.b = cyclicObj; // Introduce cyclic reference
+    expect(stringifyValue(cyclicObj)).toBe('{"a":1,"b":[Circular]}');
   });
 });
 
