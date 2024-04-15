@@ -6,6 +6,7 @@ const {
   coerceToType,
 } = require("./dataTransformations");
 
+// tests for addValues function
 describe("addValues", () => {
   test("adds two numbers", () => {
     expect(addValues(5, 3)).toBe(8);
@@ -61,6 +62,7 @@ describe("addValues", () => {
   });
 });
 
+// tests for stringifyValue function
 describe("stringifyValue", () => {
   test("should convert a string to string", () => {
     expect(stringifyValue("hello")).toBe("hello");
@@ -97,6 +99,7 @@ describe("stringifyValue", () => {
   });
 });
 
+// tests for invertBoolean function
 describe("invertBoolean", () => {
   test("inverts true to false", () => {
     expect(invertBoolean(true)).toBe(false);
@@ -107,6 +110,7 @@ describe("invertBoolean", () => {
   });
 });
 
+// tests for convertToNumber function
 describe("convertToNumber", () => {
   test("converts string to number", () => {
     expect(convertToNumber("12")).toBe(12);
@@ -147,9 +151,26 @@ describe("convertToNumber", () => {
   });
 });
 
+// tests for coerceToType function
 describe("coerceToType", () => {
   test("coerces string to number", () => {
     expect(coerceToType("123", "number")).toBe(123);
+  });
+
+  test("coerces string to boolean", () => {
+    expect(coerceToType("true", "boolean")).toBe(true);
+  });
+
+  test("coerces string to object", () => {
+    expect(coerceToType('{"key": "value"}', "object")).toEqual({
+      key: "value",
+    });
+  });
+
+  test("throws error on invalid JSON string", () => {
+    expect(() => coerceToType("{key: 'value'}", "object")).toThrow(
+      "Cannot coerce value to an object."
+    );
   });
 
   test("throws error on invalid coercion", () => {
