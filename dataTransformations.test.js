@@ -112,6 +112,34 @@ describe("convertToNumber", () => {
     expect(convertToNumber("12")).toBe(12);
   });
 
+  test("converts number to number", () => {
+    expect(convertToNumber(12)).toBe(12);
+  });
+
+  test("converts floating point string to number", () => {
+    expect(convertToNumber("3.14")).toBe(3.14);
+  });
+
+  test("converts scientific notation string to number", () => {
+    expect(convertToNumber("2.5e3")).toBe(2500);
+  });
+
+  test("converts string with special characters to number", () => {
+    expect(convertToNumber("1,000")).toBe(1000);
+  });
+
+  test("throws error on string with space", () => {
+    expect(() => convertToNumber("12 34")).toThrow(
+      "Cannot convert value to a number."
+    );
+  });
+
+  test("throws error on undefined value", () => {
+    expect(() => convertToNumber(undefined)).toThrow(
+      "Cannot convert value to a number."
+    );
+  });
+
   test("throws error on non-convertible types", () => {
     expect(() => convertToNumber("abc")).toThrow(
       "Cannot convert value to a number."
