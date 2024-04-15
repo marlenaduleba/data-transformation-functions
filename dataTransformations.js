@@ -28,10 +28,29 @@ function addValues(val1, val2) {
 }
 
 function stringifyValue(value) {
-  if (typeof value === "object" && value !== null) {
-    return JSON.stringify(value);
-  }
-  return String(value);
+  const visited = new Set();
+
+  const stringify = (val) => {
+    if (typeof val === "object" && val !== null) {
+      if (visited.has(val)) {
+        return "[Circular]";
+      }
+      visited.add(val);
+      if (Array.isArray(val)) {
+        const arrString = val.map((item) => stringify(item)).join(",");
+        return `[${arrString}]`;
+      } else {
+        const keys = Object.keys(val);
+        const objString = keys
+          .map((key) => `${JSON.stringify(key)}:${stringify(val[key])}`)
+          .join(",");
+        return `{${objString}}`;
+      }
+    }
+    return String(val);
+  };
+
+  return stringify(value);
 }
 
 function invertBoolean(value) {
