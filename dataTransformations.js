@@ -62,11 +62,19 @@ function invertBoolean(value) {
 
 function convertToNumber(value) {
   if (typeof value === "string") {
-    const parsedValue = parseFloat(value);
-    if (!isNaN(parsedValue)) {
-      return parsedValue;
+    value = value.trim().replace(/,/g, "");
+
+    if (value === "") return 0;
+
+    if (/^[\d.-]+(?:e-?\d+)?$/.test(value)) {
+      const parsed = parseFloat(value);
+      if (!isNaN(parsed)) {
+        return parsed;
+      }
     }
+    throw new Error("Cannot convert value to a number.");
   }
+
   const num = Number(value);
   if (isNaN(num)) {
     throw new Error("Cannot convert value to a number.");
